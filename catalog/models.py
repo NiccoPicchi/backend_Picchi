@@ -23,3 +23,9 @@ class Product(models.Model):
         ordering = ['name']
     def __str__(self):
         return self.name
+    def save(self, *args, **kwargs):
+        if self.stock_quantity > 0:
+            self.available = True
+        elif self.stock_quantity == 0:
+            self.available = False
+        super().save(*args, **kwargs)

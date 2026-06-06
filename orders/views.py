@@ -21,8 +21,26 @@ class CartView(generics.GenericAPIView):
         cart, created = Cart.objects.get_or_create(user=request.user)
         serializer = CartItemSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(cart=cart)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+        product = serializer.validated_data['product']
+        quantity = serializer.validated_data['quantity']
+    
+        cart_item, item_created = CartItem.objects.get_or_create(
+            cart=cart,
+            product=product,
+            defaults={'quantity': quantity}
+        )   
+    
+        if not item_created:
+            new_quantity = cart_item.quantity + quantity
+            if new_quantity > product.stock_quantity:
+                return Response(
+                    {"error": "Not enough stock available."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            cart_item.quantity = new_quantity
+            cart_item.save()
+        return Response(CartItemSerializer(cart_item).data, status=status.HTTP_201_CREATED)
     
     def delete(self, request):
         cart, created = Cart.objects.get_or_create(user=request.user)
@@ -84,12 +102,12 @@ class OrderListCreateView(generics.ListCreateAPIView):
         return Response({"error": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class OrderDetailView(generics.RetrieveAPIView):
+class OrderDetailView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
         order = get_object_or_404(Order, pk=pk)
-        if request.user != order.user and not request.user.is_customer and not request.user.is_manager:
+        if request.user != order.user and not request.user.is_customer() and not request.user.is_manager():
             return Response({"error": "You do not have permission to view this order"}, status=status.HTTP_403_FORBIDDEN)
         serializer = OrderSerializer(order)
         return Response(serializer.data)

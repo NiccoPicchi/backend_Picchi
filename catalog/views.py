@@ -1,3 +1,5 @@
+from unicodedata import name
+
 from catalog.serializers import CategorySerializer, ProductSerializer
 from .models import Product, Category
 from accounts.permissions import IsManagerOrReadOnly
@@ -22,10 +24,18 @@ class ProductViewSet(viewsets.ModelViewSet):
         user = self.request.user
         if not (user.is_authenticated and user.is_manager()):
             queryset = queryset.filter(available=True)
-        search = self.request.query_params.get("search")
-        if search:
-            queryset = queryset.filter(name__icontains=search)
-
+        name = self.request.query_params.get("name")
+        category_id = self.request.query_params.get("category")
+        category_name = self.request.query_params.get("category_name")
+        product_id = self.request.query_params.get("id")
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+        if category_id:
+            queryset = queryset.filter(category__id=category_id)
+        if category_name:
+            queryset = queryset.filter(category__name__icontains=category_name)
+        if product_id:
+            queryset = queryset.filter(id=product_id)
         return queryset
 
     @action(detail=False, methods=["get"], permission_classes=[AllowAny])
