@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-commerce API Client</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<nav id="sidebar">
+  <div class="logo">
+    <strong>E-COMMERCE API</strong>
+    <span>Testing Client Interface</span>
+  </div>
+
+  <div class="nav-section">Auth</div>
+  <div class="nav-item active" onclick="switchSection('login', this)"><i class="ti ti-login"></i> Login</div>
+  <div class="nav-item" onclick="switchSection('register', this)"><i class="ti ti-user-plus"></i> Register</div>
+  <div class="nav-item" onclick="switchSection('profile', this)"><i class="ti ti-user"></i> Profile</div>
+  <div class="nav-item" onclick="switchSection('logout', this)"><i class="ti ti-logout"></i> Logout</div>
+
+  <div class="nav-section">Catalog</div>
+  <div class="nav-item" onclick="switchSection('categories', this)"><i class="ti ti-tag"></i> Categories</div>
+  <div class="nav-item" onclick="switchSection('products', this)"><i class="ti ti-package"></i> Products</div>
+
+  <div class="nav-section">Shop</div>
+  <div class="nav-item" onclick="switchSection('cart', this)"><i class="ti ti-shopping-cart"></i> Cart</div>
+  <div class="nav-item" onclick="switchSection('orders', this)"><i class="ti ti-receipt"></i> Orders</div>
+
+  <div id="token-status">
+    <span class="dot"></span>
+    <span id="auth-label">Non autenticato</span>
+  </div>
+</nav>
+
+<div id="main">
+  <div id="topbar">
+    <h2 id="section-title">Login</h2>
+  </div>
+
+  <div id="content">
+    <div id="request-panel">
+
+      <!-- LOGIN -->
+      <div class="section active" id="section-login">
+        <div class="field-group"><label>Username</label><input id="login-username" placeholder="username"></div>
+        <div class="field-group"><label>Password</label><input id="login-password" type="password" placeholder="password"></div>
+        <button class="btn btn-primary" onclick="doLogin()"><i class="ti ti-login"></i> Login</button>
+      </div>
+
+      <!-- REGISTER -->
+      <div class="section" id="section-register">
+        <div class="row">
+          <div class="field-group"><label>Username</label><input id="reg-username" placeholder="username"></div>
+          <div class="field-group">
+            <label>Role</label>
+            <select id="reg-role">
+              <option value="customer">Customer</option>
+              <option value="manager">Manager</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group"><label>Email</label><input id="reg-email" type="email" placeholder="email@example.com"></div>
+        <div class="row">
+          <div class="field-group"><label>Password</label><input id="reg-password" type="password"></div>
+          <div class="field-group"><label>Confirm</label><input id="reg-password2" type="password"></div>
+        </div>
+        <div class="row">
+          <div class="field-group"><label>Name</label><input id="reg-first-name" placeholder="Name"></div>
+          <div class="field-group"><label>Last Name</label><input id="reg-last-name" placeholder="Last Name"></div>
+        </div>
+        <button class="btn btn-primary" onclick="doRegister()"><i class="ti ti-user-plus"></i> Register</button>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="section" id="section-profile">
+        <button class="btn btn-ghost" onclick="request('GET', '/api/auth/profile/')"><i class="ti ti-user"></i> View Profile</button>
+        <hr class="divider">
+        <span class="section-label">Update Profile</span>
+        <div class="field-group"><label>Email</label><input id="profile-email" placeholder="new email"></div>
+        <div class="field-group"><label>Address</label><input id="profile-address" placeholder="address"></div>
+        <div class="field-group"><label>Phone</label><input id="profile-phone" placeholder="+39..."></div>
+        <button class="btn btn-primary" onclick="updateProfile()"><i class="ti ti-edit"></i> Update Profile</button>
+      </div>
+
+      <!-- LOGOUT -->
+      <div class="section" id="section-logout">
+        <p style="color:#888; font-size:12px; line-height:1.6;">Invalida il token corrente sul server e resetta lo stato del client.</p>
+        <button class="btn btn-danger" onclick="doLogout()"><i class="ti ti-logout"></i> Logout</button>
+      </div>
+
+      <!-- CATEGORIES -->
+      <div class="section" id="section-categories">
+        <button class="btn btn-ghost" onclick="request('GET', '/api/catalog/categories/', null, !!token)"><i class="ti ti-list"></i> View Categories</button>
+        <hr class="divider">
+        <span class="section-label">Create Category</span>
+        <div class="field-group"><label>Name</label><input id="cat-name" placeholder="e.g., Electronics"></div>
+        <div class="field-group"><label>Description</label><textarea id="cat-desc" placeholder="description..."></textarea></div>
+        <button class="btn btn-primary" onclick="request('POST', '/api/catalog/categories/', {name: val('cat-name'), description: val('cat-desc')})">
+          <i class="ti ti-plus"></i> Create Category
+        </button>
+        <hr class="divider">
+        <span class="section-label">Delete Category</span>
+        <div class="field-group"><label>Category ID</label><input id="cat-delete-id" type="number" placeholder="ID"></div>
+        <button class="btn btn-danger" onclick="request('DELETE', `/api/catalog/categories/${val('cat-delete-id')}/`)">
+          <i class="ti ti-trash"></i> Delete Category
+        </button>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div class="section" id="section-products">
+        <div class="row">
+          <div class="field-group">
+            <label>Order by</label>
+            <select id="prod-ordering">
+              <option value="">None</option>
+              <option value="price">Price ↑</option>
+              <option value="-price">Price ↓</option>
+              <option value="name">Name A-Z</option>
+              <option value="-name">Name Z-A</option>
+              <option value="id">ID ↑</option>
+              <option value="-id">ID ↓</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Filter by</label>
+            <select id="prod-filter-type">
+              <option value="">None</option>
+              <option value="search">Product Name</option>
+              <option value="id">Product ID</option>
+              <option value="category_name">Category Name</option>
+              <option value="category">Category ID</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Value</label>
+            <input id="prod-filter-value" placeholder="search..." disabled>
+          </div>
+        </div>
+        <button class="btn btn-ghost" onclick="listProducts()"><i class="ti ti-list"></i> View Products</button>
+        <hr class="divider">
+        <span class="section-label">Create Product</span>
+        <div class="field-group"><label>Name</label><input id="prod-name" placeholder="name"></div>
+        <div class="row">
+          <div class="field-group"><label>Price</label><input id="prod-price" type="number" step="0.01" placeholder="9.99"></div>
+          <div class="field-group"><label>Stock</label><input id="prod-stock" type="number" placeholder="100"></div>
+        </div>
+        <div class="row">
+          <div class="field-group"><label>Category ID</label><input id="prod-cat" type="number" placeholder="1"></div>
+          <div class="field-group">
+            <label>Available</label>
+            <select id="prod-available">
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="createProduct()"><i class="ti ti-plus"></i> Create Product</button>
+        <hr class="divider">
+        <span class="section-label">Update Product</span>
+        <div class="row">
+          <div class="field-group"><label>Product ID</label><input id="prod-patch-id" type="number" placeholder="ID"></div>
+          <div class="field-group"><label>New Stock</label><input id="prod-patch-stock" type="number" placeholder="qty"></div>
+        </div>
+        <button class="btn btn-ghost" onclick="request('PATCH', `/api/catalog/products/${val('prod-patch-id')}/`, {stock_quantity: num('prod-patch-stock')})">
+          <i class="ti ti-edit"></i> Update Product
+        </button>
+      </div>
+
+      <!-- CART -->
+      <div class="section" id="section-cart">
+        <button class="btn btn-ghost" onclick="request('GET', '/api/shop/cart/')"><i class="ti ti-shopping-cart"></i> View Cart</button>
+        <hr class="divider">
+        <span class="section-label">Add to Cart</span>
+        <div class="row">
+          <div class="field-group"><label>Product ID</label><input id="cart-product-id" type="number" placeholder="ID"></div>
+          <div class="field-group"><label>Qty</label><input id="cart-qty" type="number" value="1" min="1"></div>
+        </div>
+        <button class="btn btn-primary" onclick="request('POST', '/api/shop/cart/', {product: num('cart-product-id'), quantity: num('cart-qty')})">
+          <i class="ti ti-plus"></i> Add to Cart
+        </button>
+        <hr class="divider">
+        <span class="section-label">Update Item</span>
+        <div class="row">
+          <div class="field-group"><label>Item ID</label><input id="cart-item-id" type="number" placeholder="ID"></div>
+          <div class="field-group"><label>New Qty</label><input id="cart-item-qty" type="number" value="1" min="1"></div>
+        </div>
+        <button class="btn btn-ghost" onclick="request('PATCH', `/api/shop/cart/${val('cart-item-id')}/`, {quantity: num('cart-item-qty')})">
+          <i class="ti ti-edit"></i> Update Cart Item
+        </button>
+        <hr class="divider">
+        <span class="section-label">Remove Item</span>
+        <div class="field-group"><label>Item ID</label><input id="cart-remove-id" type="number" placeholder="ID"></div>
+        <div class="row">
+          <button class="btn btn-danger" onclick="request('DELETE', `/api/shop/cart/${val('cart-remove-id')}/`)">
+            <i class="ti ti-trash"></i> Remove Item
+          </button>
+          <button class="btn btn-danger" onclick="request('DELETE', '/api/shop/cart/')"><i class="ti ti-trash"></i> Clear Cart</button>
+        </div>
+      </div>
+
+      <!-- ORDERS -->
+      <div class="section" id="section-orders">
+        <button class="btn btn-ghost" onclick="request('GET', '/api/shop/orders/')"><i class="ti ti-list"></i> View Orders</button>
+        <hr class="divider">
+        <span class="section-label">Create Order</span>
+        <div class="field-group"><label>Shipping Address</label><textarea id="order-address" placeholder="Via Roma 1, 50100 Firenze FI"></textarea></div>
+        <button class="btn btn-primary" onclick="request('POST', '/api/shop/orders/', {shipping_address: val('order-address')})">
+          <i class="ti ti-receipt"></i> Order Now
+        </button>
+        <hr class="divider">
+        <span class="section-label">Order Details</span>
+        <div class="field-group"><label>Order ID</label><input id="order-detail-id" type="number" placeholder="ID"></div>
+        <button class="btn btn-ghost" onclick="request('GET', `/api/shop/orders/${val('order-detail-id')}/`)">
+          <i class="ti ti-eye"></i> Get Order
+        </button>
+        <hr class="divider">
+        <span class="section-label">Update Status</span>
+        <div class="row">
+          <div class="field-group"><label>Order ID</label><input id="order-status-id" type="number" placeholder="ID"></div>
+          <div class="field-group">
+            <label>Status</label>
+            <select id="order-status-val">
+              <option value="PENDING">PENDING</option>
+              <option value="CONFIRMED">CONFIRMED</option>
+              <option value="SHIPPED">SHIPPED</option>
+              <option value="DELIVERED">DELIVERED</option>
+              <option value="CANCELLED">CANCELLED</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-ghost" onclick="request('PATCH', `/api/shop/orders/${val('order-status-id')}/`, {status: val('order-status-val')})">
+          <i class="ti ti-edit"></i> Update Status
+        </button>
+        <hr class="divider">
+        <span class="section-label">Cancel Order</span>
+        <div class="field-group"><label>Order ID</label><input id="order-cancel-id" type="number" placeholder="ID"></div>
+        <button class="btn btn-danger" onclick="request('DELETE', `/api/shop/orders/${val('order-cancel-id')}/`)">
+          <i class="ti ti-x"></i> Cancel Order
+        </button>
+      </div>
+
+    </div>
+
+    <div id="response-panel">
+      <div id="response-topbar">
+        <span id="status-badge">—</span>
+        <span id="response-method"></span>
+        <span id="response-url">No request</span>
+        <span id="response-time"></span>
+      </div>
+      <div id="response-body">
+        <div id="empty-state">
+          <i class="ti ti-api"></i>
+          <p>Select an operation and press the button</p>
+        </div>
+      </div>
+      <div id="log-panel">
+        <div id="log-label">Request History</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
