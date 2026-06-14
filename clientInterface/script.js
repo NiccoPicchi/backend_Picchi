@@ -25,7 +25,7 @@
     if (auth && token) headers['Authorization'] = `Token ${token}`;
     const t_start = performance.now();
     try {
-      const res = await fetch(BASE() + path, { method, headers, body: body ? JSON.stringify(body) : undefined });
+      const res = await fetch(BASE + path, { method, headers, body: body ? JSON.stringify(body) : undefined });
       const elapsed = Math.round(performance.now() - t_start);
       const text = await res.text();
       let data; try { data = JSON.parse(text); } catch { data = text; }
@@ -57,7 +57,7 @@
     $('response-method').textContent = method;
     $('response-url').textContent    = path;
     $('response-time').textContent   = '';
-    $('response-body').innerHTML     = `<pre style="color:#f87171">Errore di connessione:\n${msg}\n\nAssicurati che il server Django sia avviato su ${BASE()}</pre>`;
+    $('response-body').innerHTML     = `<pre style="color:#f87171">Errore di connessione:\n${msg}\n\nAssicurati che il server Django sia avviato su ${BASE}</pre>`;
   }
 
   function highlight(json) {

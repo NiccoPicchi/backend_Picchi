@@ -36,15 +36,9 @@ class ProductViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(category__name__icontains=category_name)
         if product_id:
             queryset = queryset.filter(id=product_id)
+        ordering = self.request.query_params.get("ordering")
+        ALLOWED_ORDERING = ['price', '-price', 'name', '-name', 'id', '-id']
+        if ordering and ordering in ALLOWED_ORDERING:
+            queryset = queryset.order_by(ordering)
         return queryset
 
-    @action(detail=False, methods=["get"], permission_classes=[AllowAny])
-    def available(self, request):
-        queryset = Product.objects.filter(available=True)
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)

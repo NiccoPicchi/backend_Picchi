@@ -73,8 +73,11 @@ class OrderListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        if self.request.user.is_manager:
+        if self.request.user.is_manager():
             orders = Order.objects.all()
+            status_filter = request.query_params.get("status")
+            if status_filter:
+                orders = orders.filter(status=status_filter.upper())
         else:
             orders = Order.objects.filter(user=self.request.user)
         serializer = OrderSerializer(orders, many=True)
@@ -84,7 +87,7 @@ class OrderListCreateView(generics.ListCreateAPIView):
     def post(self, request):
         serializer = OrderCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        if request.user.is_customer:
+        if request.user.is_customer():
             cart = get_object_or_404(Cart, user=request.user)
             if not cart.items.exists():
                 return Response({"error": "Cart is empty"}, status=status.HTTP_400_BAD_REQUEST)
@@ -107,7 +110,7 @@ class OrderDetailView(generics.GenericAPIView):
 
     def get(self, request, pk):
         order = get_object_or_404(Order, pk=pk)
-        if request.user != order.user and not request.user.is_customer() and not request.user.is_manager():
+        if request.user != order.user and not request.user.is_manager():
             return Response({"error": "You do not have permission to view this order"}, status=status.HTTP_403_FORBIDDEN)
         serializer = OrderSerializer(order)
         return Response(serializer.data)
@@ -126,7 +129,7 @@ class OrderDetailView(generics.GenericAPIView):
             return Response({"error": "You do not have permission to update this order"}, status=status.HTTP_403_FORBIDDEN)
             
     def delete(self, request, pk):
-        if request.user.is_customer:
+        if request.user.is_customer():
             order = get_object_or_404(Order, pk=pk, user=request.user)
             if order.status != 'PENDING':
                 return Response({"error": "Only pending orders can be cancelled"}, status=status.HTTP_400_BAD_REQUEST)
