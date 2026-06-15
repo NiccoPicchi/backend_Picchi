@@ -30,6 +30,11 @@
   <div class="nav-item" onclick="switchSection('cart', this)"><i class="ti ti-shopping-cart"></i> Cart</div>
   <div class="nav-item" onclick="switchSection('orders', this)"><i class="ti ti-receipt"></i> Orders</div>
 
+  <div class="nav-section">Admin</div>
+  <div class="nav-item" onclick="window.open(BASE + '/admin/', '_blank')">
+    <i class="ti ti-shield"></i> Admin Panel
+  </div>
+
   <div id="token-status">
     <span class="dot"></span>
     <span id="auth-label">Not Authenticated</span>
@@ -242,6 +247,7 @@
           <i class="ti ti-x"></i> Cancel Order
         </button>
       </div>
+      
 
     </div>
 
