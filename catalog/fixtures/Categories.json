@@ -1,0 +1,26 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "name": "Elettronica",
+      "description": "Smartphone, laptop e accessori tech"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "name": "Abbigliamento",
+      "description": "Capi di abbigliamento per uomo e donna"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+      "name": "Casa e Cucina",
+      "description": "Prodotti per la casa e la cucina"
+    }
+  }
+]

@@ -1,0 +1,105 @@
+[
+  {
+    "model": "orders.order",
+    "pk": 1,
+    "fields": {
+      "user": 3,
+      "created_at": "2026-01-05T12:00:00Z",
+      "updated_at": "2026-01-06T12:00:00Z",
+      "status": "DELIVERED",
+      "shipping_address": "Corso Italia 22, Milano",
+      "total_price": "1299.99"
+    }
+  },
+  {
+    "model": "orders.orderitem",
+    "pk": 1,
+    "fields": {
+      "order": 1,
+      "product": 2,
+      "product_name": "MacBook Air M2",
+      "price": "1299.99",
+      "quantity": 1
+    }
+  },
+  {
+    "model": "orders.order",
+    "pk": 2,
+    "fields": {
+      "user": 3,
+      "created_at": "2026-01-12T12:00:00Z",
+      "updated_at": "2026-01-13T12:00:00Z",
+      "status": "SHIPPED",
+      "shipping_address": "Corso Italia 22, Milano",
+      "total_price": "999.99"
+    }
+  },
+  {
+    "model": "orders.orderitem",
+    "pk": 2,
+    "fields": {
+      "order": 2,
+      "product": 1,
+      "product_name": "iPhone 15",
+      "price": "999.99",
+      "quantity": 1
+    }
+  },
+  {
+    "model": "orders.order",
+    "pk": 3,
+    "fields": {
+      "user": 4,
+      "created_at": "2026-01-14T12:00:00Z",
+      "updated_at": "2026-01-14T12:00:00Z",
+      "status": "PENDING",
+      "shipping_address": "Via Napoli 5, Roma",
+      "total_price": "269.98"
+    }
+  },
+  {
+    "model": "orders.orderitem",
+    "pk": 3,
+    "fields": {
+      "order": 3,
+      "product": 3,
+      "product_name": "AirPods Pro",
+      "price": "249.99",
+      "quantity": 1
+    }
+  },
+  {
+    "model": "orders.orderitem",
+    "pk": 4,
+    "fields": {
+      "order": 3,
+      "product": 8,
+      "product_name": "Set Coltelli Cucina",
+      "price": "79.99",
+      "quantity": 1
+    }
+  },
+  {
+    "model": "orders.order",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "created_at": "2026-01-08T12:00:00Z",
+      "updated_at": "2026-01-09T12:00:00Z",
+      "status": "CANCELLED",
+      "shipping_address": "Via Napoli 5, Roma",
+      "total_price": "89.99"
+    }
+  },
+  {
+    "model": "orders.orderitem",
+    "pk": 5,
+    "fields": {
+      "order": 4,
+      "product": 6,
+      "product_name": "Sneakers Running",
+      "price": "89.99",
+      "quantity": 1
+    }
+  }
+]
