@@ -1,4 +1,4 @@
-  const BASE = "https://piccomerce-production.up.railway.app"; // Change this to your Django server URL
+  const BASE = "http://piccomerce-production.up.railway.app"; // Change this to your Django server URL
   let token = null, lastRawResponse = '', requestLog = [];
 
   const val = id => document.getElementById(id).value;
@@ -169,11 +169,13 @@ async function updateUser() {
   if (val('user-update-role')) body.role = val('user-update-role');
   if (val('user-update-email')) body.email = val('user-update-email');
   if (val('user-update-active')) body.is_active = val('user-update-active') === 'true';
+  if (!requireId(id, 'User ID')) return;
   await request('PATCH', `/api/auth/users/${id}/`, body);
 }
 
 async function deleteUser() {
   const id = val('user-delete-id');
+  if (!requireId(id, 'User ID')) return;
   await request('DELETE', `/api/auth/users/${id}/`);
 }
 
@@ -188,3 +190,23 @@ document.querySelectorAll('input[type="number"]').forEach(input => {
   input.addEventListener('input', () => clampNonNegative(input));
   input.addEventListener('blur', () => clampNonNegative(input));
 });
+
+function requireId(id, label = 'ID') {
+  if (!id) {
+    renderValidationError(`${label} richiesto`, 'DELETE', '');
+    return false;
+  }
+  return true;
+}
+
+function renderValidationError(msg) {
+  $('empty-state')?.remove();
+  const badge = $('status-badge');
+  badge.textContent = '—';
+  badge.className = 'warn';
+  $('response-method').textContent = '';
+  $('response-url').textContent    = '';
+  $('response-time').textContent   = '';
+  const json = JSON.stringify({ error: msg }, null, 2);
+  $('response-body').innerHTML = '<pre>' + highlight(json) + '</pre>';
+}

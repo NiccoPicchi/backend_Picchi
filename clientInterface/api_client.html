@@ -108,7 +108,9 @@
         <hr class="divider">
         <span class="section-label">Delete Category</span>
         <div class="field-group"><label>Category ID</label><input id="cat-delete-id" type="number" min="1" placeholder="ID"></div>
-        <button class="btn btn-danger" onclick="request('DELETE', `/api/catalog/categories/${val('cat-delete-id')}/`)">
+        <button class="btn btn-danger" onclick="
+                const id = val('cat-delete-id');
+                if (requireId(id, 'Category ID')) request('DELETE', `/api/catalog/categories/${id}/`);">
           <i class="ti ti-trash"></i> Delete Category
         </button>
       </div>
@@ -168,7 +170,13 @@
           <div class="field-group"><label>Product ID</label><input id="prod-patch-id" type="number" min="1" placeholder="ID"></div>
           <div class="field-group"><label>New Stock</label><input id="prod-patch-stock" type="number" min="0" placeholder="qty"></div>
         </div>
-        <button class="btn btn-ghost" onclick="request('PATCH', `/api/catalog/products/${val('prod-patch-id')}/`, {stock_quantity: num('prod-patch-stock')})">
+        <button class="btn btn-ghost" onclick="
+        const prodId = val('prod-patch-id');
+        const stock = num('prod-patch-stock');
+        if (requireId(prodId, 'Product ID') && stock !== undefined) {
+          request('PATCH', `/api/catalog/products/${prodId}/`, {stock_quantity: stock});
+        }
+        ">
           <i class="ti ti-edit"></i> Update Product
         </button>
       </div>
@@ -191,14 +199,25 @@
           <div class="field-group"><label>Item ID</label><input id="cart-item-id" type="number" min="1" placeholder="ID"></div>
           <div class="field-group"><label>New Qty</label><input id="cart-item-qty" type="number" value="1" min="1"></div>
         </div>
-        <button class="btn btn-ghost" onclick="request('PATCH', `/api/shop/cart/${val('cart-item-id')}/`, {quantity: num('cart-item-qty')})">
+        <button class="btn btn-ghost" onclick="
+        const itemId = val('cart-item-id');
+        const quantity = num('cart-item-qty');
+        if (requireId(itemId, 'Item ID') && quantity !== undefined) {
+          request('PATCH', `/api/shop/cart/${itemId}/`, {quantity: quantity});
+        }
+        ">
           <i class="ti ti-edit"></i> Update Cart Item
         </button>
         <hr class="divider">
         <span class="section-label">Remove Item</span>
         <div class="field-group"><label>Item ID</label><input id="cart-remove-id" type="number" min="1" placeholder="ID"></div>
         <div class="row">
-          <button class="btn btn-danger" onclick="request('DELETE', `/api/shop/cart/${val('cart-remove-id')}/`)">
+          <button class="btn btn-danger" onclick="
+          const cItemId = val('cart-remove-id');
+          if (requireId(cItemId, 'Item ID')) {
+            request('DELETE', `/api/shop/cart/${cItemId}/`);
+          }
+          ">
             <i class="ti ti-trash"></i> Remove Item
           </button>
           <button class="btn btn-danger" onclick="request('DELETE', '/api/shop/cart/')"><i class="ti ti-trash"></i> Clear Cart</button>
@@ -217,7 +236,12 @@
         <hr class="divider">
         <span class="section-label">Order Details</span>
         <div class="field-group"><label>Order ID</label><input id="order-detail-id" type="number" min="1" placeholder="ID"></div>
-        <button class="btn btn-ghost" onclick="request('GET', `/api/shop/orders/${val('order-detail-id')}/`)">
+        <button class="btn btn-ghost" onclick="
+        const orderId = val('order-detail-id');
+        if (requireId(orderId, 'Order ID')) {
+          request('GET', `/api/shop/orders/${orderId}/`);
+        }
+        ">
           <i class="ti ti-eye"></i> Get Order
         </button>
         <hr class="divider">
@@ -235,13 +259,24 @@
             </select>
           </div>
         </div>
-        <button class="btn btn-ghost" onclick="request('PATCH', `/api/shop/orders/${val('order-status-id')}/`, {status: val('order-status-val')})">
+        <button class="btn btn-ghost" onclick="
+        const oId = val('order-status-id');
+        const status = val('order-status-val');
+        if (requireId(oId, 'Order ID') && status) {
+          request('PATCH', `/api/shop/orders/${oId}/`, {status: status});
+        }
+        ">
           <i class="ti ti-edit"></i> Update Status
         </button>
         <hr class="divider">
         <span class="section-label">Cancel Order</span>
         <div class="field-group"><label>Order ID</label><input id="order-cancel-id" type="number" min="1" placeholder="ID"></div>
-        <button class="btn btn-danger" onclick="request('DELETE', `/api/shop/orders/${val('order-cancel-id')}/`)">
+        <button class="btn btn-danger" onclick="
+        const orId = val('order-cancel-id');
+        if (requireId(orId, 'Order ID')) {
+          request('DELETE', `/api/shop/orders/${orId}/`);
+        }
+        ">
           <i class="ti ti-x"></i> Cancel Order
         </button>
       </div>
