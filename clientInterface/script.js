@@ -1,4 +1,4 @@
-  const BASE = "http://127.0.0.1:8000";
+  const BASE = "https://piccomerce-production.up.railway.app"; // Change this to your Django server URL
   let token = null, lastRawResponse = '', requestLog = [];
 
   const val = id => document.getElementById(id).value;
