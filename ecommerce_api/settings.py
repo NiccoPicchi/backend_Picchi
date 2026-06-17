@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ["djangorailway-production.up.railway.app", "127.0.0.1", "localhost" ]
+ALLOWED_HOSTS = ["piccomerce-production.up.railway.app", "127.0.0.1", "localhost" ]
 
 
 # Application definition
@@ -90,7 +90,7 @@ CORS_ALLOW_METHODS = [
     "OPTIONS",
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://djangorailway-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://piccomerce-production.up.railway.app']
 
 ROOT_URLCONF = 'ecommerce_api.urls'
 

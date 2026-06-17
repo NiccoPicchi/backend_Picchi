@@ -1,4 +1,4 @@
-  const BASE = "http://127.0.0.1:8000";
+  const BASE = "http://piccomerce-production.up.railway.app";
   let token = null, lastRawResponse = '', requestLog = [];
 
   const val = id => document.getElementById(id).value;
