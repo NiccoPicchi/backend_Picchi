@@ -48,3 +48,22 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'email', 'role', 'first_name', 'last_name', 'address', 'phone_number']
+
+class AdminUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'email', 'role', 'first_name', 'last_name', 'address', 'phone_number', 'is_active']
+
+class AdminUserCreateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'email', 'password', 'role', 'first_name', 'last_name', 'address', 'phone_number', 'is_active']
+
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = CustomUser.objects.create_user(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user

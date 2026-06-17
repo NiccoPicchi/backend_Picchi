@@ -3,7 +3,9 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
+
+from accounts.permissions import IsAdmin
+from .serializers import AdminUserCreateSerializer, AdminUserSerializer, RegisterSerializer, LoginSerializer, UserSerializer
 from .models import CustomUser
 
 # Create your views here.
@@ -43,3 +45,16 @@ class ProfileView(generics.RetrieveUpdateAPIView):
     def get(self):
         return self.request.user
 
+class UserCreateView(generics.CreateAPIView):
+    serializer_class = AdminUserCreateSerializer
+    permission_classes = [IsAdmin]
+
+class UserListView(generics.ListAPIView):
+    queryset = CustomUser.objects.all().order_by('id')
+    serializer_class = AdminUserSerializer
+    permission_classes = [IsAdmin]
+
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = AdminUserSerializer
+    permission_classes = [IsAdmin]

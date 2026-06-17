@@ -1,4 +1,4 @@
-  const BASE = "https://piccomerce-production.up.railway.app";
+  const BASE = "http://127.0.0.1:8000";
   let token = null, lastRawResponse = '', requestLog = [];
 
   const val = id => document.getElementById(id).value;
@@ -147,3 +147,44 @@
       available: val('prod-available') === 'true',
     });
   }
+
+  async function listUsers() {
+  await request('GET', '/api/auth/users/');
+}
+
+async function createUser() {
+  await request('POST', '/api/auth/users/create/', {
+    username: val('user-create-username'),
+    email: val('user-create-email'),
+    password: val('user-create-password'),
+    role: val('user-create-role'),
+    first_name: val('user-create-firstname'),
+    last_name: val('user-create-lastname'),
+  });
+}
+
+async function updateUser() {
+  const id = val('user-update-id');
+  const body = {};
+  if (val('user-update-role')) body.role = val('user-update-role');
+  if (val('user-update-email')) body.email = val('user-update-email');
+  if (val('user-update-active')) body.is_active = val('user-update-active') === 'true';
+  await request('PATCH', `/api/auth/users/${id}/`, body);
+}
+
+async function deleteUser() {
+  const id = val('user-delete-id');
+  await request('DELETE', `/api/auth/users/${id}/`);
+}
+
+function clampNonNegative(input) {
+  const minVal = parseFloat(input.min) || 0;
+  if (input.value !== '' && parseFloat(input.value) < minVal) {
+    input.value = minVal;
+  }
+}
+
+document.querySelectorAll('input[type="number"]').forEach(input => {
+  input.addEventListener('input', () => clampNonNegative(input));
+  input.addEventListener('blur', () => clampNonNegative(input));
+});

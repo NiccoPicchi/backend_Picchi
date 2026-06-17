@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>E-commerce API Client</title>
+<title>Piccomerce</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <link rel="stylesheet" href="style.css">
 
@@ -12,7 +12,7 @@
 
 <nav id="sidebar">
   <div class="logo">
-    <strong>E-COMMERCE API</strong>
+    <strong>Piccomerce</strong>
     <span>Testing Client Interface</span>
   </div>
 
@@ -31,9 +31,7 @@
   <div class="nav-item" onclick="switchSection('orders', this)"><i class="ti ti-receipt"></i> Orders</div>
 
   <div class="nav-section">Admin</div>
-  <div class="nav-item" onclick="window.open(BASE + '/admin/', '_blank')">
-    <i class="ti ti-shield"></i> Admin Panel
-  </div>
+  <div class="nav-item" onclick="switchSection('users', this)"><i class="ti ti-shield"></i> Admin Panel</div>
 
   <div id="token-status">
     <span class="dot"></span>
@@ -109,7 +107,7 @@
         </button>
         <hr class="divider">
         <span class="section-label">Delete Category</span>
-        <div class="field-group"><label>Category ID</label><input id="cat-delete-id" type="number" placeholder="ID"></div>
+        <div class="field-group"><label>Category ID</label><input id="cat-delete-id" type="number" min="1" placeholder="ID"></div>
         <button class="btn btn-danger" onclick="request('DELETE', `/api/catalog/categories/${val('cat-delete-id')}/`)">
           <i class="ti ti-trash"></i> Delete Category
         </button>
@@ -150,11 +148,11 @@
         <span class="section-label">Create Product</span>
         <div class="field-group"><label>Name</label><input id="prod-name" placeholder="name"></div>
         <div class="row">
-          <div class="field-group"><label>Price</label><input id="prod-price" type="number" step="0.01" placeholder="9.99"></div>
-          <div class="field-group"><label>Stock</label><input id="prod-stock" type="number" placeholder="100"></div>
+          <div class="field-group"><label>Price</label><input id="prod-price" type="number" min="0" step="0.01" placeholder="9.99"></div>
+          <div class="field-group"><label>Stock</label><input id="prod-stock" type="number" min="0" placeholder="100"></div>
         </div>
         <div class="row">
-          <div class="field-group"><label>Category ID</label><input id="prod-cat" type="number" placeholder="1"></div>
+          <div class="field-group"><label>Category ID</label><input id="prod-cat" type="number" min="1" placeholder="1"></div>
           <div class="field-group">
             <label>Available</label>
             <select id="prod-available">
@@ -167,8 +165,8 @@
         <hr class="divider">
         <span class="section-label">Update Product</span>
         <div class="row">
-          <div class="field-group"><label>Product ID</label><input id="prod-patch-id" type="number" placeholder="ID"></div>
-          <div class="field-group"><label>New Stock</label><input id="prod-patch-stock" type="number" placeholder="qty"></div>
+          <div class="field-group"><label>Product ID</label><input id="prod-patch-id" type="number" min="1" placeholder="ID"></div>
+          <div class="field-group"><label>New Stock</label><input id="prod-patch-stock" type="number" min="0" placeholder="qty"></div>
         </div>
         <button class="btn btn-ghost" onclick="request('PATCH', `/api/catalog/products/${val('prod-patch-id')}/`, {stock_quantity: num('prod-patch-stock')})">
           <i class="ti ti-edit"></i> Update Product
@@ -181,7 +179,7 @@
         <hr class="divider">
         <span class="section-label">Add to Cart</span>
         <div class="row">
-          <div class="field-group"><label>Product ID</label><input id="cart-product-id" type="number" placeholder="ID"></div>
+          <div class="field-group"><label>Product ID</label><input id="cart-product-id" type="number" min="1" placeholder="ID"></div>
           <div class="field-group"><label>Qty</label><input id="cart-qty" type="number" value="1" min="1"></div>
         </div>
         <button class="btn btn-primary" onclick="request('POST', '/api/shop/cart/', {product: num('cart-product-id'), quantity: num('cart-qty')})">
@@ -190,7 +188,7 @@
         <hr class="divider">
         <span class="section-label">Update Item</span>
         <div class="row">
-          <div class="field-group"><label>Item ID</label><input id="cart-item-id" type="number" placeholder="ID"></div>
+          <div class="field-group"><label>Item ID</label><input id="cart-item-id" type="number" min="1" placeholder="ID"></div>
           <div class="field-group"><label>New Qty</label><input id="cart-item-qty" type="number" value="1" min="1"></div>
         </div>
         <button class="btn btn-ghost" onclick="request('PATCH', `/api/shop/cart/${val('cart-item-id')}/`, {quantity: num('cart-item-qty')})">
@@ -198,7 +196,7 @@
         </button>
         <hr class="divider">
         <span class="section-label">Remove Item</span>
-        <div class="field-group"><label>Item ID</label><input id="cart-remove-id" type="number" placeholder="ID"></div>
+        <div class="field-group"><label>Item ID</label><input id="cart-remove-id" type="number" min="1" placeholder="ID"></div>
         <div class="row">
           <button class="btn btn-danger" onclick="request('DELETE', `/api/shop/cart/${val('cart-remove-id')}/`)">
             <i class="ti ti-trash"></i> Remove Item
@@ -218,14 +216,14 @@
         </button>
         <hr class="divider">
         <span class="section-label">Order Details</span>
-        <div class="field-group"><label>Order ID</label><input id="order-detail-id" type="number" placeholder="ID"></div>
+        <div class="field-group"><label>Order ID</label><input id="order-detail-id" type="number" min="1" placeholder="ID"></div>
         <button class="btn btn-ghost" onclick="request('GET', `/api/shop/orders/${val('order-detail-id')}/`)">
           <i class="ti ti-eye"></i> Get Order
         </button>
         <hr class="divider">
         <span class="section-label">Update Status</span>
         <div class="row">
-          <div class="field-group"><label>Order ID</label><input id="order-status-id" type="number" placeholder="ID"></div>
+          <div class="field-group"><label>Order ID</label><input id="order-status-id" type="number" min="1" placeholder="ID"></div>
           <div class="field-group">
             <label>Status</label>
             <select id="order-status-val">
@@ -242,11 +240,66 @@
         </button>
         <hr class="divider">
         <span class="section-label">Cancel Order</span>
-        <div class="field-group"><label>Order ID</label><input id="order-cancel-id" type="number" placeholder="ID"></div>
+        <div class="field-group"><label>Order ID</label><input id="order-cancel-id" type="number" min="1" placeholder="ID"></div>
         <button class="btn btn-danger" onclick="request('DELETE', `/api/shop/orders/${val('order-cancel-id')}/`)">
           <i class="ti ti-x"></i> Cancel Order
         </button>
       </div>
+    <!-- GESTIONE UTENTI -->
+      <div class="section" id="section-users">
+        <button class="btn btn-ghost" onclick="listUsers()"><i class="ti ti-list"></i> View Users</button>
+        <hr class="divider">
+      
+        <span class="section-label">Create User</span>
+        <div class="row">
+          <div class="field-group"><label>Username</label><input id="user-create-username" placeholder="username"></div>
+          <div class="field-group">
+            <label>Role</label>
+            <select id="user-create-role">
+              <option value="customer">Customer</option>
+              <option value="manager">Manager</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group"><label>Email</label><input id="user-create-email" type="email" placeholder="email@example.com">
+        </div>
+        <div class="field-group"><label>Password</label><input id="user-create-password" type="password" placeholder="password">
+        </div>
+        <div class="row">
+          <div class="field-group"><label>First Name</label><input id="user-create-firstname" placeholder="First Name"></div>
+          <div class="field-group"><label>Last Name</label><input id="user-create-lastname" placeholder="Last Name"></div>
+        </div>
+        <button class="btn btn-primary" onclick="createUser()"><i class="ti ti-user-plus"></i> Create User</button>
+        <hr class="divider">
+
+        <span class="section-label">Update User</span>
+        <div class="field-group"><label>User ID</label><input id="user-update-id" type="number" min="1" placeholder="ID"></div>
+        <div class="row">
+          <div class="field-group">
+            <label>Role</label>
+            <select id="user-update-role">
+              <option value="customer">Customer</option>
+              <option value="manager">Manager</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Active</label>
+            <select id="user-update-active">
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group"><label>Email</label><input id="user-update-email" placeholder="new email (optional)"></div>
+        <button class="btn btn-primary" onclick="updateUser()"><i class="ti ti-edit"></i> Update User</button>
+        <hr class="divider">
+
+      
+        <span class="section-label">Delete User</span>
+        <div class="field-group"><label>User ID</label><input id="user-delete-id" type="number" min="1" placeholder="ID"></div>
+        <button class="btn btn-danger" onclick="deleteUser()"><i class="ti ti-trash"></i> Delete User</button>
+      </div>
+      
       
 
     </div>
