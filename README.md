@@ -8,7 +8,7 @@
 
 ## Descrizione
 
-Piccomerce per una piattaforma e-commerce che permette la gestione di prodotti, categorie, carrello e ordini. Il sistema supporta due ruoli utente: customer e manager, con permessi differenziati per ogni operazione.
+Piccomerce è una piattaforma e-commerce che permette la gestione di prodotti, categorie, carrello e ordini. Il sistema supporta due ruoli utente: customer e manager, con permessi differenziati per ogni operazione.
 
 ---
 
@@ -60,9 +60,10 @@ Il file `db.sqlite3` incluso nel repository contiene dati pre-popolati pronti pe
 
 ### Dati inclusi
 - 3 categorie (Elettronica, Abbigliamento, Casa e Cucina)
-- 8 prodotti (di cui 1 esaurito)
+- 8 prodotti (di cui 1 esaurito nella categoria Abbigliamento)
 - 4 ordini in stati diversi (DELIVERED, SHIPPED, PENDING, CANCELLED)
-- Carrello attivo per customer_demo
+- Carrello riempito per customer_demo, vuoto per customer2_demo
+- Ordini DELIVERED e SHIPPED per customer_demo, PENDING e CANCELLED per customer2_demo
 
 ---
 
