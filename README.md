@@ -92,25 +92,25 @@ Il client permette di testare tutte le operazioni disponibili: autenticazione, g
 | PATCH | `/api/auth/users/{id}/` | Sì | Admin | Aggiorna utente (ruolo, email, stato attivo) |
 | DELETE | `/api/auth/users/{id}/` | Sì | Admin | Elimina utente |
 | GET | `/api/catalog/categories/` | No | — | Lista categorie |
-| POST | `/api/catalog/categories/` | Sì | Manager | Crea categoria |
+| POST | `/api/catalog/categories/` | Sì | Manager, Admin | Crea categoria |
 | GET | `/api/catalog/categories/{id}/` | No | — | Dettaglio categoria |
-| PUT/PATCH | `/api/catalog/categories/{id}/` | Sì | Manager | Modifica categoria |
-| DELETE | `/api/catalog/categories/{id}/` | Sì | Manager | Elimina categoria |
+| PUT/PATCH | `/api/catalog/categories/{id}/` | Sì | Manager, Admin | Modifica categoria |
+| DELETE | `/api/catalog/categories/{id}/` | Sì | Manager, Admin | Elimina categoria |
 | GET | `/api/catalog/products/` | No | — | Lista prodotti (filtri: name, category, category_name, id, ordering) |
-| POST | `/api/catalog/products/` | Sì | Manager | Crea prodotto |
+| POST | `/api/catalog/products/` | Sì | Manager, Admin | Crea prodotto |
 | GET | `/api/catalog/products/{id}/` | No | — | Dettaglio prodotto |
-| PUT/PATCH | `/api/catalog/products/{id}/` | Sì | Manager | Modifica prodotto |
-| DELETE | `/api/catalog/products/{id}/` | Sì | Manager | Elimina prodotto |
-| GET | `/api/shop/cart/` | Sì | Customer | Visualizza carrello |
-| POST | `/api/shop/cart/` | Sì | Customer | Aggiunge prodotto al carrello |
-| DELETE | `/api/shop/cart/` | Sì | Customer | Svuota carrello |
-| PATCH | `/api/shop/cart/{item_id}/` | Sì | Customer | Modifica quantità item |
-| DELETE | `/api/shop/cart/{item_id}/` | Sì | Customer | Rimuove item dal carrello |
+| PUT/PATCH | `/api/catalog/products/{id}/` | Sì | Manager, Admin | Modifica prodotto |
+| DELETE | `/api/catalog/products/{id}/` | Sì | Manager, Admin | Elimina prodotto |
+| GET | `/api/shop/cart/` | Sì | Customer, Admin | Visualizza carrello |
+| POST | `/api/shop/cart/` | Sì | Customer, Admin | Aggiunge prodotto al carrello |
+| DELETE | `/api/shop/cart/` | Sì | Customer, Admin | Svuota carrello |
+| PATCH | `/api/shop/cart/{item_id}/` | Sì | Customer, Admin | Modifica quantità item |
+| DELETE | `/api/shop/cart/{item_id}/` | Sì | Customer, Admin | Rimuove item dal carrello |
 | GET | `/api/shop/orders/` | Sì | Tutti | Lista ordini (propri per customer, tutti per manager) |
-| POST | `/api/shop/orders/` | Sì | Customer | Crea ordine dal carrello |
+| POST | `/api/shop/orders/` | Sì | Customer, Admin | Crea ordine dal carrello |
 | GET | `/api/shop/orders/{id}/` | Sì | Tutti | Dettaglio ordine |
-| PATCH | `/api/shop/orders/{id}/` | Sì | Manager | Aggiorna stato ordine |
-| DELETE | `/api/shop/orders/{id}/` | Sì | Customer | Cancella ordine (solo PENDING) |
+| PATCH | `/api/shop/orders/{id}/` | Sì | Manager, Admin | Aggiorna stato ordine |
+| DELETE | `/api/shop/orders/{id}/` | Sì | Customer, Admin | Cancella ordine (solo PENDING) |
 
 ---
 
@@ -133,6 +133,7 @@ clientInterface/
   script.js               # logica client
 db.sqlite3              # database demo pre-popolato
 requirements.txt
+runtime.txt
 README.md
 Procfile
 ```
