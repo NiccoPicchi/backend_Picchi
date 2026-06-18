@@ -18,7 +18,7 @@ Il sistema prevede due ruoli applicativi (campo `role` sul modello utente: `cust
 
 ### Customer
 - Registrazione e login
-- Visualizzazione e filtraggio categorie e prodotti disponibili
+- Visualizzazione e filtraggio categorie e prodotti disponibili (ovvero prodotti con campo `available` messo a true)
 - Gestione del carrello (aggiunta, modifica quantità, rimozione, svuotamento)
 - Creazione ordini dal carrello
 - Visualizzazione e cancellazione dei propri ordini (solo se in stato PENDING)
@@ -40,7 +40,7 @@ Il sistema prevede due ruoli applicativi (campo `role` sul modello utente: `cust
 ## Installazione locale
 
 ```
-# 1. Clona il repository e apri la cartella ClientInterface
+# 1. Clona il repository e apri la cartella clientInterface
 
 # 2. Apri il file api_client.html su un browser per testare tutte le funzionalità
 ```
