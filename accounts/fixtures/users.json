@@ -13,7 +13,7 @@
     "is_staff": true,
     "is_active": true,
     "date_joined": "2026-06-17T07:17:29.002Z",
-    "role": "admin",
+    "role": "manager",
     "address": null,
     "phone_number": null,
     "groups": [],

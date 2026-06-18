@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -47,14 +46,14 @@ class ProfileView(generics.RetrieveUpdateAPIView):
 
 class UserCreateView(generics.CreateAPIView):
     serializer_class = AdminUserCreateSerializer
-    permission_classes = [IsAdmin]
+    permission_classes = (IsAdmin,)
 
 class UserListView(generics.ListAPIView):
     queryset = CustomUser.objects.all().order_by('id')
     serializer_class = AdminUserSerializer
-    permission_classes = [IsAdmin]
+    permission_classes = (IsAdmin,)
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = AdminUserSerializer
-    permission_classes = [IsAdmin]
+    permission_classes = (IsAdmin,)

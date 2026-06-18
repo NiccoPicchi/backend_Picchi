@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 class CartView(generics.GenericAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
-    permission_classes = [IsCustomer]
+    permission_classes = (IsCustomer,)
 
     def get(self, request):
         cart, created = Cart.objects.get_or_create(user=request.user)
@@ -48,12 +48,13 @@ class CartView(generics.GenericAPIView):
         return Response({"message": "Cart cleared"}, status=status.HTTP_204_NO_CONTENT)
     
 class CartItemView(generics.GenericAPIView):
-    permission_classes = [IsCustomer]
-        
+    permission_classes = (IsCustomer,)
+
     def patch(self, request, item_id):
         try:
             cart_item = CartItem.objects.get(id=item_id, cart__user=request.user)
-        except CartItem.DoesNotExist:                return Response({"error": "Cart item not found"}, status=status.HTTP_404_NOT_FOUND)
+        except CartItem.DoesNotExist:
+            return Response({"error": "Cart item not found"}, status=status.HTTP_404_NOT_FOUND)
         serializer = CartItemSerializer(cart_item, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -70,7 +71,7 @@ class CartItemView(generics.GenericAPIView):
 class OrderListCreateView(generics.ListCreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         if self.request.user.is_manager():
@@ -106,7 +107,7 @@ class OrderListCreateView(generics.ListCreateAPIView):
 
 
 class OrderDetailView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk):
         order = get_object_or_404(Order, pk=pk)

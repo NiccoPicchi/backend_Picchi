@@ -1,23 +1,19 @@
-from unicodedata import name
-
 from catalog.serializers import CategorySerializer, ProductSerializer
 from .models import Product, Category
 from accounts.permissions import IsManagerOrReadOnly
 from rest_framework import viewsets
-from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
+
 
 # Create your views here.
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsManagerOrReadOnly]
+    permission_classes = (IsManagerOrReadOnly,)
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsManagerOrReadOnly]
+    permission_classes = (IsManagerOrReadOnly,)
 
     def get_queryset(self):
         queryset = Product.objects.all()
