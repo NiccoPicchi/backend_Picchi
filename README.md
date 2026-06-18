@@ -43,6 +43,8 @@ Il sistema prevede due ruoli applicativi (campo `role` sul modello utente: `cust
 # 1. Clona il repository e apri la cartella ClientInterface
 
 # 2. Apri il file api_client.html su un browser per testare tutte le funzionalità
+```
+
 ---
 
 ## Database demo
