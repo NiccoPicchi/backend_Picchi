@@ -1,4 +1,4 @@
-  const BASE = "http://piccomerce-production.up.railway.app"; // Change this to your Django server URL
+  const BASE = "https://piccomerce-production.up.railway.app"; 
   let token = null, lastRawResponse = '', requestLog = [];
 
   const val = id => document.getElementById(id).value;
